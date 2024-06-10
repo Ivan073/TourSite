@@ -6,6 +6,7 @@ import samsolutions.site.tour.entities.Tour;
 import samsolutions.site.tour.repository.TourRepository;
 
 import java.sql.*;
+import java.util.List;
 
 @Service
 public class TourService {
@@ -20,5 +21,13 @@ public class TourService {
         Tour tour = new Tour();
         tour.setName(name);
         return tourRepository.save(tour);
+    }
+
+    public Tour createTour(Tour tour) {
+        return tourRepository.save(tour);
+    }
+
+    public List<Tour> getTours(){
+        return (List<Tour>) tourRepository.findAll();
     }
 }
