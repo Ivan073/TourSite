@@ -19,8 +19,7 @@ public class Tour {
     private String country;
     private Double price;
 
-    //@Lob
-    //private byte[] image;
+    private String image;
 
     public void setId(Integer id) {
         this.id = id;
