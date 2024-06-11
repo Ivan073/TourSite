@@ -17,12 +17,6 @@ public class TourService {
         this.tourRepository = tourRepository;
     }
 
-    public Tour createTour(String name) {
-        Tour tour = new Tour();
-        //tour.setName(name);
-        return tourRepository.save(tour);
-    }
-
     public Tour createTour(Tour tour) {
         return tourRepository.save(tour);
     }
