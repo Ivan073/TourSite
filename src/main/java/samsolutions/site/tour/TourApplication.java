@@ -28,13 +28,13 @@ public class TourApplication {
 	}
 
 	@PostMapping("/tours")
-	public ResponseEntity<Tour> post_tours(@RequestBody Tour tour) {
+	public ResponseEntity<Tour> postTours(@RequestBody Tour tour) {
 		tourService.createTour(tour);
 		return new ResponseEntity<>(tour, HttpStatus.CREATED);
 	}
 
 	@GetMapping("/tours")
-	public List<Tour> get_tours() {
+	public List<Tour> getTours() {
 		return tourService.getTours();
 	}
 }
