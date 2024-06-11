@@ -19,7 +19,7 @@ public class TourService {
 
     public Tour createTour(String name) {
         Tour tour = new Tour();
-        tour.setName(name);
+        //tour.setName(name);
         return tourRepository.save(tour);
     }
 
