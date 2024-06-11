@@ -14,27 +14,7 @@ import java.util.List;
 @SpringBootApplication
 @RestController
 public class TourApplication {
-	@Autowired
-	private TourService tourService;
-
 	public static void main(String[] args) {
 		SpringApplication.run(TourApplication.class, args);
-	}
-
-	@GetMapping("/hello")
-	public String hello() {
-		tourService.createTour("Tour1");
-		return "Hello World!";
-	}
-
-	@PostMapping("/tours")
-	public ResponseEntity<Tour> postTours(@RequestBody Tour tour) {
-		tourService.createTour(tour);
-		return new ResponseEntity<>(tour, HttpStatus.CREATED);
-	}
-
-	@GetMapping("/tours")
-	public List<Tour> getTours() {
-		return tourService.getTours();
 	}
 }
