@@ -12,7 +12,6 @@ import samsolutions.site.tour.services.TourService;
 import java.util.List;
 
 @SpringBootApplication
-@RestController
 public class TourApplication {
 	public static void main(String[] args) {
 
