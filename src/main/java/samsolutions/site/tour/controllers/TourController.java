@@ -108,7 +108,7 @@ public class TourController {
     }
 
     @PutMapping
-    public ResponseEntity<TourDTO> updateTour(@RequestBody TourDTO tourdto) {
+    public ResponseEntity<TourDTO> updateTour(@ModelAttribute TourDTO tourdto, BindingResult result) {
         try{
             Tour entity = TourConverter.convertToEntity(tourdto);
             int id = entity.getId();
