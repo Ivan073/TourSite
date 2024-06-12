@@ -20,6 +20,7 @@ public class TourService {
     }
 
     public Tour createTour(Tour tour) {
+        tour.setId(0); //предотвращает перезапись в случае уже существующего id
         return tourRepository.save(tour);
     }
 
