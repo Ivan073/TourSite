@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import samsolutions.site.tour.converters.TourConverter;
 import samsolutions.site.tour.dtos.TourDTO;
 import samsolutions.site.tour.entities.Tour;
@@ -26,7 +28,7 @@ public class TourController {
     }*/
 
     @PostMapping
-    public ResponseEntity<TourDTO> postTours(@RequestBody TourDTO tourdto) {
+    public ResponseEntity<TourDTO> postTours(@ModelAttribute TourDTO tourdto, BindingResult result) {
         try {
             Tour entity = TourConverter.convertToEntity(tourdto);
             tourService.createTour(entity);

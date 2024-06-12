@@ -3,6 +3,7 @@ package samsolutions.site.tour.dtos;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 
@@ -22,7 +23,7 @@ public class TourDTO {
     @JsonProperty("PRICE")
     private Double price;
     @JsonProperty("IMAGE")
-    private String image;
+    private MultipartFile image;
 
     public TourDTO() {
 
