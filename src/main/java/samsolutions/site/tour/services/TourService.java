@@ -7,6 +7,7 @@ import samsolutions.site.tour.repository.TourRepository;
 
 import java.sql.*;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TourService {
@@ -23,5 +24,9 @@ public class TourService {
 
     public List<Tour> getTours(){
         return (List<Tour>) tourRepository.findAll();
+    }
+
+    public Optional<Tour> getTourById(long id){
+        return tourRepository.findById(id);
     }
 }

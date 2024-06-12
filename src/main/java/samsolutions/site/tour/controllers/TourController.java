@@ -11,6 +11,7 @@ import samsolutions.site.tour.entities.Tour;
 import samsolutions.site.tour.services.TourService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/tours")
@@ -34,5 +35,16 @@ public class TourController {
     @GetMapping
     public List<Tour> getTours() {
         return tourService.getTours();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TourDTO> getTourById(@PathVariable long id) {
+        Optional<Tour> entity = tourService.getTourById(id);
+
+        if (entity.isPresent()) {
+            return ResponseEntity.ok(TourConverter.convertToDTO(entity.get()));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
