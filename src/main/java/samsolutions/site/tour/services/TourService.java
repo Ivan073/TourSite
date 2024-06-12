@@ -1,6 +1,7 @@
 package samsolutions.site.tour.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import samsolutions.site.tour.entities.Tour;
 import samsolutions.site.tour.repository.TourRepository;
@@ -32,5 +33,12 @@ public class TourService {
 
     public void deleteTourById(long id){
         tourRepository.deleteById(id);
+    }
+
+    public void updateTour(Tour tour){
+        int id = tour.getId();
+        if (getTourById(id).isPresent()) {
+            tourRepository.save(tour);
+        }
     }
 }

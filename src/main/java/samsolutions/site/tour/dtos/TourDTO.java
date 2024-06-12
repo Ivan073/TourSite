@@ -9,6 +9,8 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 public class TourDTO {
+    @JsonProperty("ID")
+    private int id;
     @JsonProperty("NAME")
     private String name;
     @JsonProperty("START_DATE")
