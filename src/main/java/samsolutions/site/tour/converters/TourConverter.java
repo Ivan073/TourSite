@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.util.UUID;
 
 public class TourConverter {
-    @Autowired
-    private static ServletContext servletContext;
 
     public static Tour convertToEntity(TourDTO tourDTO) {
         Tour tour = new Tour();
@@ -26,7 +24,7 @@ public class TourConverter {
 
         // image у dto будет файлом, а у entity строкой с путем к файлу
         String dirpath = System.getProperty("user.dir");
-        String filePath = dirpath+"\\images\\"+ UUID.randomUUID().toString();
+        String filePath = dirpath+"\\images\\"+ UUID.randomUUID().toString()+".png";
         File serverFile = new File(filePath);
         try {
             tourDTO.getImage().transferTo(serverFile);

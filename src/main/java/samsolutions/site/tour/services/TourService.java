@@ -3,6 +3,7 @@ package samsolutions.site.tour.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import samsolutions.site.tour.entities.Tour;
 import samsolutions.site.tour.repository.TourRepository;
 
@@ -27,6 +28,7 @@ public class TourService {
     public List<Tour> getTours(){
         return (List<Tour>) tourRepository.findAll();
     }
+
 
     public Optional<Tour> getTourById(long id){
         return tourRepository.findById(id);

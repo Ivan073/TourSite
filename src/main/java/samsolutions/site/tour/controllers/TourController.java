@@ -1,6 +1,7 @@
 package samsolutions.site.tour.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,9 @@ import samsolutions.site.tour.dtos.TourDTO;
 import samsolutions.site.tour.entities.Tour;
 import samsolutions.site.tour.services.TourService;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,6 +59,30 @@ public class TourController {
 
             if (entity.isPresent()) {
                 return ResponseEntity.ok(TourConverter.convertToDTO(entity.get()));
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
+        }
+    }
+
+    @GetMapping("/images/{id}")
+    @ResponseBody
+    public ResponseEntity<InputStreamResource> getTourImageById(@PathVariable long id) {
+        try {
+            Optional<Tour> entity = tourService.getTourById(id);
+            if (entity.isPresent()) {
+                String path = entity.get().getImage();
+                if (path == null){
+                    return ResponseEntity.notFound().build();
+                }
+                MediaType contentType = MediaType.IMAGE_PNG;
+                File file = new File(path);
+                FileInputStream in = new FileInputStream(file);
+                return ResponseEntity.ok()
+                        .contentType(contentType)
+                        .body(new InputStreamResource(in));
             } else {
                 return ResponseEntity.notFound().build();
             }
