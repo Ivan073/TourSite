@@ -29,4 +29,8 @@ public class TourService {
     public Optional<Tour> getTourById(long id){
         return tourRepository.findById(id);
     }
+
+    public void deleteTourById(long id){
+        tourRepository.deleteById(id);
+    }
 }

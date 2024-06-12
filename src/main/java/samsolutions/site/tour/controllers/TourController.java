@@ -47,4 +47,17 @@ public class TourController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<TourDTO> deleteTourById(@PathVariable long id) {
+        Optional<Tour> entity = tourService.getTourById(id);
+
+        if (entity.isPresent()) {
+            tourService.deleteTourById(id);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
