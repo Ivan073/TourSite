@@ -63,7 +63,13 @@ public class TourController {
     @PutMapping
     public ResponseEntity<TourDTO> updateTour(@RequestBody TourDTO tourdto) {
         Tour entity = TourConverter.convertToEntity(tourdto);
-        tourService.updateTour(entity);
-        return new ResponseEntity<>(TourConverter.convertToDTO(entity), HttpStatus.CREATED);
+        int id = entity.getId();
+        if (tourService.getTourById(id).isPresent()) {
+            tourService.updateTour(entity);
+            return new ResponseEntity<>(TourConverter.convertToDTO(entity), HttpStatus.CREATED);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
     }
 }
