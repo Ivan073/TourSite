@@ -18,6 +18,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tours")
@@ -43,9 +44,11 @@ public class TourController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Tour>> getTours() {
+    public ResponseEntity<List<TourDTO>> getTours() {
         try {
-            return new ResponseEntity<>(tourService.getTours(), HttpStatus.OK);
+            return new ResponseEntity<List<TourDTO>>(
+                    (List<TourDTO>) tourService.getTours().stream().map(TourConverter::convertToDTO).collect(Collectors.toList()),
+                    HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
         }

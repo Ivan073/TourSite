@@ -10,6 +10,7 @@ import samsolutions.site.tour.entities.Tour;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
+import java.util.function.Function;
 
 public class TourConverter {
 
