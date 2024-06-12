@@ -23,15 +23,17 @@ public class TourConverter {
         tour.setPrice(tourDTO.getPrice());
 
         // image у dto будет файлом, а у entity строкой с путем к файлу
-        String dirpath = System.getProperty("user.dir");
-        String filePath = dirpath+"\\images\\"+ UUID.randomUUID().toString()+".png";
-        File serverFile = new File(filePath);
-        try {
-            tourDTO.getImage().transferTo(serverFile);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (tourDTO.getImage() != null) {
+            String dirpath = System.getProperty("user.dir");
+            String filePath = dirpath + "\\images\\" + UUID.randomUUID().toString() + ".png";
+            File serverFile = new File(filePath);
+            try {
+                tourDTO.getImage().transferTo(serverFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            tour.setImage(filePath);
         }
-        tour.setImage(filePath);
         return tour;
     }
 
