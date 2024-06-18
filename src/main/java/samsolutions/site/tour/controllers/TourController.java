@@ -5,6 +5,8 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,6 +37,7 @@ public class TourController {
     }*/
 
     @PostMapping
+  //  @Secured("ADMIN")
     public ResponseEntity<TourDTO> postTours(@ModelAttribute TourDTO tourdto, BindingResult result) {
         try {
             Tour entity = TourConverter.convertToEntity(tourdto);
@@ -46,6 +49,7 @@ public class TourController {
     }
 
     @GetMapping
+   // @Secured("ADMIN")
     public ResponseEntity<List<TourDTO>> getTours() {
         try {
             return new ResponseEntity<List<TourDTO>>(
