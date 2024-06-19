@@ -2,6 +2,7 @@ package samsolutions.site.tour;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -15,12 +16,16 @@ public class SecurityConfig {
                         authorizeHttpRequests
                                 .requestMatchers("/tours").hasRole("USER")
                                 .requestMatchers("/tours/images/**").permitAll()
+                                .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
-                        .loginPage("http://localhost:8081/login") // URL сервера аутентификации
-                        .permitAll()
+                        .loginPage("http://localhost:8081/login")
+                        .defaultSuccessUrl("http://google.com")
+                        .failureUrl("http://localhost:8081/login?error")
+                        .loginProcessingUrl("http://localhost:8081/login")
                 )
-                .logout(logout -> logout.permitAll());
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
+             //   .logout(logout -> logout.permitAll());
         return http.build();
     }
 }
