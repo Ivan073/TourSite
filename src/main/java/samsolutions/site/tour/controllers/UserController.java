@@ -47,6 +47,7 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandler(@RequestBody SignupRequest user)  {
 
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         String username = user.getUsername();
         String email = user.getEmail();
