@@ -2,7 +2,11 @@ package samsolutions.site.tour.controllers;
 
 //import in.mahesh.tasks.service.UserServiceImplementation;
 //import in.mahesh.tasks.service.UserService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -12,18 +16,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import samsolutions.site.tour.converters.UserConverter;
 import samsolutions.site.tour.dtos.AuthResponse;
 import samsolutions.site.tour.dtos.LoginRequest;
 import samsolutions.site.tour.dtos.SignupRequest;
+import samsolutions.site.tour.dtos.UserProfile;
 import samsolutions.site.tour.entities.UserData;
+import samsolutions.site.tour.jwt.JwtConstant;
 import samsolutions.site.tour.jwt.JwtProvider;
 import samsolutions.site.tour.repository.UserRepository;
 import samsolutions.site.tour.services.UserServiceImplementation;
+
+import javax.crypto.SecretKey;
 
 @RestController
 @RequestMapping("/auth")
@@ -98,6 +103,29 @@ public class UserController {
         authResponse.setStatus(true);
 
         return new ResponseEntity<>(authResponse,HttpStatus.OK);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<UserProfile> getUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            try {
+                authHeader = authHeader.substring(7);
+                SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
+                @SuppressWarnings("deprecation")
+                Claims claims = Jwts.parser().setSigningKey(key).build().parseClaimsJws(authHeader).getBody();
+                System.out.print(claims);
+                String username = String.valueOf(claims.get("username"));
+                UserData userData = userRepository.findByUsername(username);
+                UserProfile profile = UserConverter.convertToProfile(userData);
+                return new ResponseEntity<>(profile,HttpStatus.OK);
+            }
+            catch (Exception e) {
+                throw new BadCredentialsException("Invalid token", e);
+            }
+        }
+        else{
+            return new ResponseEntity<>(new UserProfile(),HttpStatus.NOT_FOUND);
+        }
     }
 
 

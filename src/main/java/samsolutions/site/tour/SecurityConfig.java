@@ -42,10 +42,7 @@ public class SecurityConfig {
                 })).
                 authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
-                             //   .requestMatchers("/tours").hasRole("ADMIN")
-                                .requestMatchers("/tours").authenticated()
-                             //   .requestMatchers("/tours/14").hasRole("USER")
-                             //   .requestMatchers("/tours/images/**").permitAll()
+                                .requestMatchers("/auth/user").authenticated()
                                 .anyRequest().permitAll()
                              //   .anyRequest().authenticated()
                 )
