@@ -1,5 +1,6 @@
 package samsolutions.site.tour.controllers;
 
+import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
@@ -13,10 +14,12 @@ import org.springframework.web.multipart.MultipartFile;
 import samsolutions.site.tour.converters.TourConverter;
 import samsolutions.site.tour.dtos.TourDTO;
 import samsolutions.site.tour.entities.Tour;
+import samsolutions.site.tour.services.SolrService;
 import samsolutions.site.tour.services.TourService;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
@@ -30,14 +33,10 @@ public class TourController {
     @Autowired
     private TourService tourService;
 
-    /*@GetMapping
-    public String hello() {
-        tourService.createTour("Tour1");
-        return "Hello World!";
-    }*/
+    @Autowired
+    private SolrService solrService;
 
     @PostMapping
-  //  @Secured("ADMIN")
     public ResponseEntity<TourDTO> postTours(@ModelAttribute TourDTO tourdto, BindingResult result) {
         try {
             Tour entity = TourConverter.convertToEntity(tourdto);
@@ -49,11 +48,25 @@ public class TourController {
     }
 
     @GetMapping
-   // @Secured("ADMIN")
     public ResponseEntity<List<TourDTO>> getTours() {
         try {
             return new ResponseEntity<List<TourDTO>>(
                     (List<TourDTO>) tourService.getTours().stream().map(TourConverter::convertToDTO).collect(Collectors.toList()),
+                    HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
+        }
+
+    }
+
+    @GetMapping("/country/{country}")
+    public ResponseEntity<List<TourDTO>> getToursByCountry(@PathVariable("country") String country) throws SolrServerException, IOException {
+        try {
+            return new ResponseEntity<List<TourDTO>>(
+                    solrService.getByCountry(country).
+                            stream().
+                            map(TourConverter::convertToDTO).
+                            collect(Collectors.toList()),
                     HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
