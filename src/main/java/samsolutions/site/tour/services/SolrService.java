@@ -10,6 +10,7 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import samsolutions.site.tour.entities.Tour;
 
@@ -77,16 +78,12 @@ public class SolrService {
             DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
 
             if (document.get("endDate") != null) {
-                ZonedDateTime zonedDateTime = ZonedDateTime.parse(document.get("endDate").toString(), formatter);
-                Instant instant = zonedDateTime.toInstant();
-                Date date = Date.from(instant);
+                Date date = (Date) document.get("endDate");
                 tour.setEndDate(date);
             }
 
             if (document.get("startDate") != null) {
-                ZonedDateTime zonedDateTime = ZonedDateTime.parse(document.get("startDate").toString(), formatter);
-                Instant instant = zonedDateTime.toInstant();
-                Date date = Date.from(instant);
+                Date date = (Date) document.get("startDate");
                 tour.setStartDate(date);
             }
 

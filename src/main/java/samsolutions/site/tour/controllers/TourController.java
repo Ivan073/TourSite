@@ -21,6 +21,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,12 +39,35 @@ public class TourController {
     private SolrService solrService;
 
     @PostMapping
-    public ResponseEntity<TourDTO> postTours(@ModelAttribute TourDTO tourdto, BindingResult result) {
+    public ResponseEntity<TourDTO> postTours(@RequestParam(value = "NAME", required = false) String name,
+                                             @RequestParam(value = "IMAGE", required = false) MultipartFile image,
+                                             @RequestParam(value = "START_DATE", required = false) String startDateStr,
+                                             @RequestParam(value = "END_DATE", required = false) String endDateStr,
+                                             @RequestParam(value = "COUNTRY", required = false) String country,
+                                             @RequestParam(value = "PRICE", required = false) Double price) {
         try {
-            Tour entity = TourConverter.convertToEntity(tourdto);
+            TourDTO tourDTO = new TourDTO();
+            tourDTO.setName(name);
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            if(startDateStr != null) {
+                Date startDate = dateFormat.parse(startDateStr);
+                tourDTO.setStartDate(startDate);
+            }
+
+            if(endDateStr != null) {
+                Date endDate = dateFormat.parse(endDateStr);
+                tourDTO.setEndDate(endDate);
+            }
+
+            tourDTO.setCountry(country);
+            tourDTO.setPrice(price);
+            tourDTO.setImage(image);
+
+            Tour entity = TourConverter.convertToEntity(tourDTO);
             tourService.createTour(entity);
             return new ResponseEntity<>(TourConverter.convertToDTO(entity), HttpStatus.CREATED);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
@@ -61,7 +86,7 @@ public class TourController {
 
     @GetMapping("/country/{country}")
     public ResponseEntity<List<TourDTO>> getToursByCountry(@PathVariable("country") String country) throws SolrServerException, IOException {
-        try {
+       try {
             return new ResponseEntity<List<TourDTO>>(
                     solrService.getByCountry(country).
                             stream().
@@ -130,10 +155,33 @@ public class TourController {
     }
 
     @PutMapping
-    public ResponseEntity<TourDTO> updateTour(@ModelAttribute TourDTO tourdto, BindingResult result) {
+    public ResponseEntity<TourDTO> updateTour(@RequestParam(value = "ID", required = false) int id,
+                                              @RequestParam(value = "NAME", required = false) String name,
+                                              @RequestParam(value = "IMAGE", required = false) MultipartFile image,
+                                              @RequestParam(value = "START_DATE", required = false) String startDateStr,
+                                              @RequestParam(value = "END_DATE", required = false) String endDateStr,
+                                              @RequestParam(value = "COUNTRY", required = false) String country,
+                                              @RequestParam(value = "PRICE", required = false) Double price) {
         try{
-            Tour entity = TourConverter.convertToEntity(tourdto);
-            int id = entity.getId();
+            TourDTO tourDTO = new TourDTO();
+            tourDTO.setName(name);
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            if(startDateStr != null) {
+                Date startDate = dateFormat.parse(startDateStr);
+                tourDTO.setStartDate(startDate);
+            }
+
+            if(endDateStr != null) {
+                Date endDate = dateFormat.parse(endDateStr);
+                tourDTO.setEndDate(endDate);
+            }
+
+            tourDTO.setCountry(country);
+            tourDTO.setPrice(price);
+            tourDTO.setImage(image);
+
+            Tour entity = TourConverter.convertToEntity(tourDTO);
             if (tourService.getTourById(id).isPresent()) {
                 tourService.updateTour(entity);
                 return new ResponseEntity<>(TourConverter.convertToDTO(entity), HttpStatus.CREATED);
