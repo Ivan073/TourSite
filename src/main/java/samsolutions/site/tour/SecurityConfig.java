@@ -41,7 +41,6 @@ public class SecurityConfig {
                              //   .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
-              //  .formLogin(login -> login.defaultSuccessUrl("http://localhost:3000/"))
                 .csrf((csrf) -> csrf
                         .disable()
                 )

@@ -4,6 +4,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.impl.XMLResponseParser;
+import org.apache.solr.client.solrj.request.UpdateRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -32,6 +33,7 @@ public class SolrService {
     }
 
     public void index() throws SolrServerException, IOException {
+        solr.deleteByQuery("*:*");
         List<Tour> tours = tourService.getTours();
         for (Tour tour:tours) {
             SolrInputDocument document = new SolrInputDocument();
